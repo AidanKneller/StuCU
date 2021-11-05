@@ -11,7 +11,7 @@
 {% block content %}
   {% for category in categories %}
     <div>
-      <h1><a href="{% url category|add:"-page" %}">{{category|title}}</a></h1>
+      <h1><a href="{% url category|add:"-page" %}" style="text-decoration: none">{{category|title}}</a></h1>
     </div> 
   {% endfor%}
 

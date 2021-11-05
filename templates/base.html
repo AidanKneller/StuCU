@@ -19,11 +19,7 @@
     </nav>
   </header> {% endcomment %}
   <header id="main-navigation">
-    <h1><a href="{% url "landing-page" %}">StuCU</a></h1>
-    <nav>
-      <p>Log In</p>
-      {% comment %} <a href="{% url "user-page" %}">All Posts</a> {% endcomment %}
-    </nav>
+    <h1><a href="{% url "landing-page" %}" style="text-decoration: none">StuCU</a></h1>
   </header>
   {% block content %}
   {% endblock %}
