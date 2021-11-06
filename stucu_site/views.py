@@ -35,6 +35,12 @@ def on_campus_housing(request):
     "entries": entries
   })
 
+def on_campus_housing_detail(request, building):
+  resource = OnCampusHousing.objects.get(dorm_unit_name = building)
+  return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
+    "resource": resource
+  })
+
 def off_campus_housing(request):
   return render(request, "stucu_site/resources/off_campus_housing_page.html", {
     #this is where we will query the data from this table and send it in?
