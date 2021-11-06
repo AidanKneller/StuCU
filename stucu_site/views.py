@@ -12,11 +12,13 @@ categories = [
 ]
 
 def landing_page(request):
+  # logic
   return render(request, "stucu_site/landing_page.html", {
     "categories": categories
     })
 
 def academics(request):
+  
   return render(request, "stucu_site/resources/academics_page.html", {
     #this is where we will query the data from this table and send it in?
   })
