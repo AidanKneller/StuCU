@@ -12,4 +12,10 @@
   <h1>Restaurants</h1>
   <p>Links to local area restaurants</p>
 
+  {% for entry in entries %}
+    <div>
+      <h1>{{entry.restaurant_name|title}}</h1>
+    </div> 
+  {% endfor%}
+
 {% endblock %}

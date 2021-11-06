@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import *
 
 # Create your views here.
 
@@ -12,20 +13,20 @@ categories = [
 ]
 
 def landing_page(request):
-  # logic
   return render(request, "stucu_site/landing_page.html", {
     "categories": categories
     })
 
 def academics(request):
-  
+  entries = Academics.objects.all().order_by('website_name')
   return render(request, "stucu_site/resources/academics_page.html", {
-    #this is where we will query the data from this table and send it in?
+    "entries": entries
   })
 
 def on_campus_housing(request):
+  entries = OnCampusHousing.objects.all().order_by('dorm_unit_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
-    #this is where we will query the data from this table and send it in?
+    "entries": entries
   })
 
 def off_campus_housing(request):
@@ -39,11 +40,13 @@ def registered_student_organizations(request):
   })
 
 def restaurants(request):
+  entries = Restaurants.objects.all().order_by('restaurant_name')
   return render(request, "stucu_site/resources/restaurants_page.html", {
-    #this is where we will query the data from this table and send it in?
+    "entries": entries
   })
 
 def school_social_media(request):
+  entries = SchoolSocialMedia.objects.all().order_by('organization_name')
   return render(request, "stucu_site/resources/school_social_media_page.html", {
-    #this is where we will query the data from this table and send it in?
+    "entries": entries
   })

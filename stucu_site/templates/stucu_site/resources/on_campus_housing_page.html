@@ -12,4 +12,10 @@
   <h1>On Campus Housing</h1>
   <p>Links to on campus housing options</p>
 
+  {% for entry in entries %}
+    <div>
+      <h1>{{entry.dorm_unit_name|title}}</h1>
+    </div> 
+  {% endfor%}
+
 {% endblock %}

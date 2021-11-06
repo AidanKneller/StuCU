@@ -12,4 +12,10 @@
   <h1>Academics</h1>
   <p>Links to academic resources</p>
 
+  {% for entry in entries %}
+    <div>
+      <h1>{{entry.website_name|title}}</h1>
+    </div> 
+  {% endfor%}
+
 {% endblock %}

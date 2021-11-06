@@ -12,4 +12,10 @@
   <h1>School Social Media</h1>
   <p>Links to school social media accounts</p>
 
+  {% for entry in entries %}
+    <div>
+      <h1>{{entry.organization_name|title}}</h1>
+    </div> 
+  {% endfor%}
+
 {% endblock %}
