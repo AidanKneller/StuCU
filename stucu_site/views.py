@@ -23,6 +23,12 @@ def academics(request):
     "entries": entries
   })
 
+def academics_detail(request, academic_name):
+  resource = Academics.objects.get(website_name = academic_name)
+  return render(request, "stucu_site/resources/academics_detail.html", {
+    "resource": resource
+  })
+
 def on_campus_housing(request):
   entries = OnCampusHousing.objects.all().order_by('dorm_unit_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {

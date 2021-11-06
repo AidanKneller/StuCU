@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ resource.website_name }}
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ resource.website_name }}</h1>
+  <p>{{ resource.description }}</p>
+  <p><a href="{{resource.website_link}}">{{ resource.website_link }}</a></p>
+{% endblock %}

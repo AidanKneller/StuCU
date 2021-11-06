@@ -6,6 +6,8 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 
 
 class Academics(models.Model):
@@ -17,6 +19,9 @@ class Academics(models.Model):
     class Meta:
         managed = False
         db_table = 'Academics'
+
+    def slug(self):
+        return slugify(self.website_name)
 
 
 class Comments(models.Model):
@@ -49,6 +54,9 @@ class OffCampusHousing(models.Model):
         managed = False
         db_table = 'Off_Campus_Housing'
 
+    def get_url_suffix(self):
+        return self.company_name.lower().replace(" ", "-")
+
 
 class OnCampusHousing(models.Model):
     on_campus_housing_id = models.IntegerField(db_column='On_Campus_Housing_ID', primary_key=True)  # Field name made lowercase.
@@ -64,6 +72,9 @@ class OnCampusHousing(models.Model):
         managed = False
         db_table = 'On_Campus_Housing'
 
+    def get_url_suffix(self):
+        return self.dorm_unit_name.lower().replace(" ", "-")
+
 
 class Rso(models.Model):
     rso_id = models.IntegerField(db_column='RSO_ID', primary_key=True)  # Field name made lowercase.
@@ -77,6 +88,9 @@ class Rso(models.Model):
         managed = False
         db_table = 'RSO'
 
+    def get_url_suffix(self):
+        return self.rso_name.lower().replace(" ", "-")
+
 
 class Restaurants(models.Model):
     restaurant_id = models.IntegerField(db_column='Restaurant_ID', primary_key=True)  # Field name made lowercase.
@@ -89,6 +103,9 @@ class Restaurants(models.Model):
     class Meta:
         managed = False
         db_table = 'Restaurants'
+
+    def get_url_suffix(self):
+        return self.restaurant_name.lower().replace(" ", "-")
 
 
 class SchoolSocialMedia(models.Model):
@@ -106,6 +123,9 @@ class SchoolSocialMedia(models.Model):
     class Meta:
         managed = False
         db_table = 'School_Social_Media'
+
+    def get_url_suffix(self):
+        return self.organization_name.lower().replace(" ", "-")
 
 
 class Stars(models.Model):
