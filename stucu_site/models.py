@@ -6,8 +6,6 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
-from django.urls import reverse
-from django.utils.text import slugify
 
 
 class Academics(models.Model):
@@ -19,10 +17,7 @@ class Academics(models.Model):
     class Meta:
         managed = False
         db_table = 'Academics'
-
-    def slug(self):
-        return slugify(self.website_name)
-
+        
 
 class Comments(models.Model):
     comment_id = models.IntegerField(db_column='Comment_ID', primary_key=True)  # Field name made lowercase.

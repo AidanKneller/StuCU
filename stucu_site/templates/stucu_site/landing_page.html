@@ -10,6 +10,9 @@
 {% endblock %}
 
 {% block content %}
+  {% if username %}
+    <p>Hi, {{ username }}, aka {{ display_name }} </p>
+  {% endif %}
   {% for category in categories %}
     <div>
       <h1><a href="{% url category|add:"-page" %}" style="text-decoration: none; color: black">{{category|title|dehyphenate}}</a></h1>

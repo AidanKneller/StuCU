@@ -24,6 +24,10 @@
       <input type="search" placeholder="Search resources" name="searched" required>
       <button type="submit">Search</button>
     </form>
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
   </header>
   {% block content %}
   {% endblock %}

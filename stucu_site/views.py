@@ -12,10 +12,31 @@ categories = [
   "school-social-media"
 ]
 
+def login(request):
+  return render(request, "stucu_site/account/login.html", {})
+
+def process_login(request):
+  if request.method == 'POST':
+    username = request.POST['username']
+    password = request.POST['password']
+    found_users = Users.objects.raw('SELECT * FROM Users WHERE username = %s AND password = %s', [username, password])
+    if len(list(found_users)) == 1:
+      this_user = found_users[0]
+      request.session['current_user_id'] = this_user.user_id
+      request.session['current_username'] = this_user.username
+      request.session['current_user_display_name'] = this_user.display_name
+      return landing_page(request)
+    else:
+      return render(request, "stucu_site/account/login.html", {})
+  else:
+    return render(request, "stucu_site/account/login.html", {})
+
 def landing_page(request):
   return render(request, "stucu_site/landing_page.html", {
-    "categories": categories
-    })
+    "categories": categories,
+    "username": request.session['current_username'],
+    "display_name": request.session['current_user_display_name']
+  })
 
 def academics(request):
   entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name')
