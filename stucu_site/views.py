@@ -24,10 +24,16 @@ def academics(request):
   })
 
 def academics_detail(request, id):
-  resource = Academics.objects.get(pk = id) # need to fix
-  return render(request, "stucu_site/resources/academics_detail.html", {
-    "resource": resource
-  })
+  results = Academics.objects.raw('SELECT * FROM Academics WHERE academics_id = %s', [id])
+  # Make sure that the query only returned one item, otherwise something went wrong
+  if len(list(results)) == 1: 
+    return render(request, "stucu_site/resources/academics_detail.html", {
+      "resource": results[0]
+    })
+  else:
+    return render(request, "stucu_site/resources/academics_detail.html", {
+      "error_message": "Oh no! Something went wrong with accessing this resource."
+    })
 
 def on_campus_housing(request):
   entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name ASC')
@@ -36,10 +42,16 @@ def on_campus_housing(request):
   })
 
 def on_campus_housing_detail(request, id):
-  resource = OnCampusHousing.objects.get(on_campus_housing_id = id) # need to fix
-  return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
-    "resource": resource
-  })
+  results = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE on_campus_housing_id = %s', [id])
+  # Make sure that the query only returned one item, otherwise something went wrong
+  if len(list(results)) == 1: 
+    return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
+      "resource": results[0]
+    })
+  else:
+    return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
+      "error_message": "Oh no! Something went wrong with accessing this resource."
+    })
 
 def off_campus_housing(request):
   return render(request, "stucu_site/resources/off_campus_housing_page.html", {
@@ -58,10 +70,16 @@ def restaurants(request):
   })
 
 def restaurant_detail(request, id):
-  resource = Restaurants.objects.get(restaurant_id = id) # need to fix
-  return render(request, "stucu_site/resources/restaurant_detail.html", {
-    "resource": resource
-  })
+  results = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_id = %s', [id])
+  # Make sure that the query only returned one item, otherwise something went wrong
+  if len(list(results)) == 1: 
+    return render(request, "stucu_site/resources/restaurant_detail.html", {
+      "resource": results[0]
+    })
+  else:
+    return render(request, "stucu_site/resources/restaurant_detail.html", {
+      "error_message": "Oh no! Something went wrong with accessing this resource."
+    })
 
 def school_social_media(request):
   entries = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media ORDER BY organization_name ASC')
@@ -70,17 +88,24 @@ def school_social_media(request):
   })
 
 def ssm_detail(request, id):
-  resource = SchoolSocialMedia.objects.get(pk = id) # need to fix
-  socials = [
-    resource.facebook_link, resource.instagram_link,
-    resource.linkedin_link, resource.twitter_link,
-    resource.snapchat_link, resource.youtube_link,
-    resource.pinterest_link, resource.weibo_link
-  ]
-  return render(request, "stucu_site/resources/school_social_media_detail.html", {
-    "resource": resource,
-    "socials": socials
-  })
+  results = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE ssm_id = %s', [id])
+  # Make sure that the query only returned one item, otherwise something went wrong
+  if len(list(results)) == 1: 
+      resource = results[0]
+      socials = [
+        resource.facebook_link, resource.instagram_link,
+        resource.linkedin_link, resource.twitter_link,
+        resource.snapchat_link, resource.youtube_link,
+        resource.pinterest_link, resource.weibo_link
+      ]
+      return render(request, "stucu_site/resources/school_social_media_detail.html", {
+        "resource": resource,
+        "socials": socials
+      })
+  else:
+    return render(request, "stucu_site/resources/school_social_media_detail.html", {
+      "error_message": "Oh no! Something went wrong with accessing this resource."
+    })
 
 # need to add proper search!
 def search_results(request):

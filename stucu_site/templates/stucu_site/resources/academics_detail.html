@@ -9,7 +9,11 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{ resource.website_name }}</h1>
-  <p>{{ resource.description }}</p>
-  <p><a href="{{resource.website_link}}">{{ resource.website_link }}</a></p>
+  {% if resource %}
+    <h1>{{ resource.website_name }}</h1>
+    <p>{{ resource.description }}</p>
+    <p><a href="{{resource.website_link}}">{{ resource.website_link }}</a></p>
+  {% else %}
+    <p>{{ error_message }}</p>
+  {% endif %}
 {% endblock %}
