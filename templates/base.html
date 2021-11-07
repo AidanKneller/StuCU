@@ -19,6 +19,11 @@
   </header> {% endcomment %}
   <header id="main-navigation">
     <h1><a href="{% url "landing-page" %}">StuCU</a></h1>
+    <form method="POST" action="{% url 'search-results' %}">
+      {% csrf_token %}
+      <input type="search" placeholder="Search resources" name="searched" required>
+      <button type="submit">Search</button>
+    </form>
   </header>
   {% block content %}
   {% endblock %}

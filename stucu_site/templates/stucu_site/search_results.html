@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  StuCU
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  {% if searched %}
+    <h1>Showing results for: {{ searched }}</h1>  
+    {% for result in academic_results %}
+      <p> what {{ result.website_name }}</p>
+    {% endfor %}
+  {% else %}
+    <h1>Search something!</h1>
+  {% endif %}
+{% endblock %}

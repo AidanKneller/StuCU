@@ -15,5 +15,6 @@ urlpatterns = [
     path("restaurants/", views.restaurants, name="restaurants-page"),
     path("restaurants/<int:id>", views.restaurant_detail, name="restaurant-detail-page"),
     path("school-social-media/", views.school_social_media, name="school-social-media-page"),
-    path("school-social-media/<int:id>", views.ssm_detail, name="school-social-media-detail-page")
+    path("school-social-media/<int:id>", views.ssm_detail, name="school-social-media-detail-page"),
+    path("search-results/", views.search_results, name="search-results")
 ]

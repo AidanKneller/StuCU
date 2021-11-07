@@ -18,25 +18,25 @@ def landing_page(request):
     })
 
 def academics(request):
-  entries = Academics.objects.all().order_by('website_name')
+  entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name ASC')
   return render(request, "stucu_site/resources/academics_page.html", {
     "entries": entries
   })
 
 def academics_detail(request, id):
-  resource = Academics.objects.get(pk = id)
+  resource = Academics.objects.get(pk = id) # need to fix
   return render(request, "stucu_site/resources/academics_detail.html", {
     "resource": resource
   })
 
 def on_campus_housing(request):
-  entries = OnCampusHousing.objects.all().order_by('dorm_unit_name')
+  entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name ASC')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
     "entries": entries
   })
 
 def on_campus_housing_detail(request, id):
-  resource = OnCampusHousing.objects.get(on_campus_housing_id = id)
+  resource = OnCampusHousing.objects.get(on_campus_housing_id = id) # need to fix
   return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
     "resource": resource
   })
@@ -52,25 +52,25 @@ def registered_student_organizations(request):
   })
 
 def restaurants(request):
-  entries = Restaurants.objects.all().order_by('restaurant_name')
+  entries = Restaurants.objects.raw('SELECT * FROM Restaurants ORDER BY restaurant_name ASC')
   return render(request, "stucu_site/resources/restaurants_page.html", {
     "entries": entries
   })
 
 def restaurant_detail(request, id):
-  resource = Restaurants.objects.get(restaurant_id = id)
+  resource = Restaurants.objects.get(restaurant_id = id) # need to fix
   return render(request, "stucu_site/resources/restaurant_detail.html", {
     "resource": resource
   })
 
 def school_social_media(request):
-  entries = SchoolSocialMedia.objects.all().order_by('organization_name')
+  entries = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media ORDER BY organization_name ASC')
   return render(request, "stucu_site/resources/school_social_media_page.html", {
     "entries": entries
   })
 
 def ssm_detail(request, id):
-  resource = SchoolSocialMedia.objects.get(pk = id)
+  resource = SchoolSocialMedia.objects.get(pk = id) # need to fix
   socials = [
     resource.facebook_link, resource.instagram_link,
     resource.linkedin_link, resource.twitter_link,
@@ -81,3 +81,13 @@ def ssm_detail(request, id):
     "resource": resource,
     "socials": socials
   })
+
+# need to add proper search!
+def search_results(request):
+  if request.method == "POST":
+    searched = request.POST['searched']
+    return render(request, "stucu_site/search_results.html", {
+      "searched": searched
+    })
+  else:
+    return render(request, "stucu_site/search_results.html", {})
