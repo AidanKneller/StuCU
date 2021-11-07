@@ -2,35 +2,28 @@
 {% load static %}
 
 {% block title %}
-  {{ resource.dorm_unit_name }}
+  {{ resource.restaurant_name }}
 {% endblock %}
 
 {% block css_files %}
 {% endblock %}
 
 {% block content %}
-  <h1>{{ resource.dorm_unit_name }}</h1>
-  <p>{{ resource.description }}</p>
+  <h1>{{ resource.restaurant_name }}</h1>
+  <p>Cuisine: {{ resource.cuisine }}</p>
   <p>Address: {{ resource.address }}</p>
   <p>
     {% if resource.phone %}
       Call them at {{ resource.phone }}
     {% else %}
-      There is no available phone number for this building.
-    {% endif %}
-  </p>
-  <p>
-    {% if resource.email %}
-      Get in touch with them at <a href="mailto:{{resource.email}}">{{ resource.email }}</a>
-    {% else %}
-      There is no available email for this building.
+      There is no available phone number for this restaurant.
     {% endif %}
   </p>
   <p>
     {% if resource.website_link %}
       Visit them at <a href="{{resource.website_link}}">{{ resource.website_link }}</a>
     {% else %}
-      This building does not have a website.
+      This restaurant does not have a website.
     {% endif %}
   </p>
 {% endblock %}

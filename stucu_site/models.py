@@ -107,7 +107,7 @@ class Restaurants(models.Model):
     def get_url_suffix(self):
         return self.restaurant_name.lower().replace(" ", "-")
 
-
+    
 class SchoolSocialMedia(models.Model):
     ssm_id = models.IntegerField(db_column='SSM_ID', primary_key=True)  # Field name made lowercase.
     organization_name = models.CharField(db_column='Organization_name', max_length=255)  # Field name made lowercase.

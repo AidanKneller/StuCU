@@ -23,8 +23,8 @@ def academics(request):
     "entries": entries
   })
 
-def academics_detail(request, academic_name):
-  resource = Academics.objects.get(website_name = academic_name)
+def academics_detail(request, id):
+  resource = Academics.objects.get(pk = id)
   return render(request, "stucu_site/resources/academics_detail.html", {
     "resource": resource
   })
@@ -35,8 +35,8 @@ def on_campus_housing(request):
     "entries": entries
   })
 
-def on_campus_housing_detail(request, building):
-  resource = OnCampusHousing.objects.get(dorm_unit_name = building)
+def on_campus_housing_detail(request, id):
+  resource = OnCampusHousing.objects.get(on_campus_housing_id = id)
   return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
     "resource": resource
   })
@@ -57,8 +57,27 @@ def restaurants(request):
     "entries": entries
   })
 
+def restaurant_detail(request, id):
+  resource = Restaurants.objects.get(restaurant_id = id)
+  return render(request, "stucu_site/resources/restaurant_detail.html", {
+    "resource": resource
+  })
+
 def school_social_media(request):
   entries = SchoolSocialMedia.objects.all().order_by('organization_name')
   return render(request, "stucu_site/resources/school_social_media_page.html", {
     "entries": entries
+  })
+
+def ssm_detail(request, id):
+  resource = SchoolSocialMedia.objects.get(pk = id)
+  socials = [
+    resource.facebook_link, resource.instagram_link,
+    resource.linkedin_link, resource.twitter_link,
+    resource.snapchat_link, resource.youtube_link,
+    resource.pinterest_link, resource.weibo_link
+  ]
+  return render(request, "stucu_site/resources/school_social_media_detail.html", {
+    "resource": resource,
+    "socials": socials
   })

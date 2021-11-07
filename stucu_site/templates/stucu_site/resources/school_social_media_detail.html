@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ resource.organization_name }}
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ resource.organization_name }}</h1>
+  {% for social in socials %}
+    {% if social %}
+      <p>
+        <a href="{{ social }}" style="text-decoration: none">{{ social }}</a>
+      </p>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
