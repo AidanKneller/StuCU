@@ -12,6 +12,10 @@
 {% block content %}
   {% if username %}
     <p>Hi, {{ username }}, aka {{ display_name }} </p>
+    <form method="POST" action="{% url 'profile-page' %}">
+      {% csrf_token %}
+      <button type="submit">My Profile</button>
+    </form>
   {% endif %}
   {% for category in categories %}
     <div>

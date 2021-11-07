@@ -13,7 +13,7 @@ categories = [
 ]
 
 def login(request):
-  return render(request, "stucu_site/account/login.html", {})
+  return render(request, "stucu_site/account/login.html")
 
 def process_login(request):
   if request.method == 'POST':
@@ -27,9 +27,15 @@ def process_login(request):
       request.session['current_user_display_name'] = this_user.display_name
       return landing_page(request)
     else:
-      return render(request, "stucu_site/account/login.html", {})
+      return render(request, "stucu_site/account/login.html")
   else:
-    return render(request, "stucu_site/account/login.html", {})
+    return render(request, "stucu_site/account/login.html")
+
+def profile_page(request):
+  return render(request, "stucu_site/account/profile_page.html", {
+    "username": request.session['current_username'],
+    "display_name": request.session['current_user_display_name']
+  })
 
 def landing_page(request):
   return render(request, "stucu_site/landing_page.html", {
