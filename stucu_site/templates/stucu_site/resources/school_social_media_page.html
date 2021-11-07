@@ -14,7 +14,7 @@
 
   {% for entry in entries %}
     <div>
-      <h1><a href="{% url 'school-social-media-detail-page' entry.ssm_id %}" style="text-decoration: none">{{entry.organization_name|title}}</a></h1>
+      <h2><a href="{% url 'school-social-media-detail-page' entry.ssm_id %}" style="text-decoration: none; color: black">{{entry.organization_name|title}}</a></h2>
     </div> 
   {% endfor%}
 

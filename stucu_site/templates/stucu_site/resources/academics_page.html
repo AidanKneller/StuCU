@@ -14,7 +14,7 @@
 
   {% for entry in entries %}
     <div>
-      <h1><a href="{% url 'academics-detail-page' entry.academics_id %}" style="text-decoration: none">{{entry.website_name|title}}</a></h1>
+      <h2><a href="{% url 'academics-detail-page' entry.academics_id %}" style="text-decoration: none; color: black">{{entry.website_name|title}}</a></h2>
     </div> 
   {% endfor%}
 

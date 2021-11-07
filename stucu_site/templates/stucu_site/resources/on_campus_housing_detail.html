@@ -21,14 +21,14 @@
   </p>
   <p>
     {% if resource.email %}
-      Get in touch with them at <a href="mailto:{{resource.email}}">{{ resource.email }}</a>
+      Get in touch with them at <a href="mailto:{{resource.email}}" style="color: blue">{{ resource.email }}</a>
     {% else %}
       There is no available email for this building.
     {% endif %}
   </p>
   <p>
     {% if resource.website_link %}
-      Visit them at <a href="{{resource.website_link}}">{{ resource.website_link }}</a>
+      Visit them at <a href="{{resource.website_link}}" style="color: blue">{{ resource.website_link }}</a>
     {% else %}
       This building does not have a website.
     {% endif %}

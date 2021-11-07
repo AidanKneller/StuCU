@@ -14,7 +14,7 @@
 
   {% for entry in entries %}
     <div>
-      <h1><a href="{% url 'on-campus-housing-detail-page' entry.on_campus_housing_id %}" style="text-decoration: none">{{entry.dorm_unit_name|title}}</a></h1>
+      <h2><a href="{% url 'on-campus-housing-detail-page' entry.on_campus_housing_id %}" style="text-decoration: none; color: black">{{entry.dorm_unit_name|title}}</a></h2>
     </div> 
   {% endfor%}
 

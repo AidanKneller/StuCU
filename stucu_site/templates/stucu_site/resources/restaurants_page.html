@@ -14,7 +14,7 @@
 
   {% for entry in entries %}
     <div>
-      <h1><a href="{% url 'restaurant-detail-page' entry.restaurant_id %}" style="text-decoration: none">{{entry.restaurant_name|title}}</a></h1>
+      <h2><a href="{% url 'restaurant-detail-page' entry.restaurant_id %}" style="text-decoration: none; color: black">{{entry.restaurant_name|title}}</a></h2>
     </div> 
   {% endfor%}
 
