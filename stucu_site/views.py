@@ -18,7 +18,7 @@ def landing_page(request):
     })
 
 def academics(request):
-  entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name ASC')
+  entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name')
   return render(request, "stucu_site/resources/academics_page.html", {
     "entries": entries
   })
@@ -36,7 +36,7 @@ def academics_detail(request, id):
     })
 
 def on_campus_housing(request):
-  entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name ASC')
+  entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
     "entries": entries
   })
@@ -64,7 +64,7 @@ def registered_student_organizations(request):
   })
 
 def restaurants(request):
-  entries = Restaurants.objects.raw('SELECT * FROM Restaurants ORDER BY restaurant_name ASC')
+  entries = Restaurants.objects.raw('SELECT * FROM Restaurants ORDER BY restaurant_name')
   return render(request, "stucu_site/resources/restaurants_page.html", {
     "entries": entries
   })
@@ -82,7 +82,7 @@ def restaurant_detail(request, id):
     })
 
 def school_social_media(request):
-  entries = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media ORDER BY organization_name ASC')
+  entries = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media ORDER BY organization_name')
   return render(request, "stucu_site/resources/school_social_media_page.html", {
     "entries": entries
   })
@@ -111,8 +111,22 @@ def ssm_detail(request, id):
 def search_results(request):
   if request.method == "POST":
     searched = request.POST['searched']
+    searched_name = '%' + searched + '%'
+    academics_name_like = Academics.objects.raw('SELECT * FROM Academics WHERE website_name LIKE %s ORDER BY website_name', [searched_name])
+    off_campus_name_like = OffCampusHousing.objects.raw('SELECT * FROM Off_Campus_Housing WHERE company_name LIKE %s ORDER BY company_name', [searched_name])
+    on_campus_name_like = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE dorm_unit_name LIKE %s ORDER BY dorm_unit_name', [searched_name])
+    print(on_campus_name_like)
+    rso_name_like = Rso.objects.raw('SELECT * FROM RSO WHERE rso_name LIKE %s ORDER BY rso_name', [searched_name])
+    restaurants_name_like = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_name LIKE %s ORDER BY restaurant_name', [searched_name])
+    ssm_name_like = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE organization_name LIKE %s ORDER BY organization_name', [searched_name])
     return render(request, "stucu_site/search_results.html", {
-      "searched": searched
+      "searched": searched,
+      "academic_name_matches": academics_name_like,
+      "off_campus_matches": off_campus_name_like,
+      "on_campus_matches": on_campus_name_like,
+      "rso_matches": rso_name_like,
+      "restaurants_matches": restaurants_name_like,
+      "ssm_matches": ssm_name_like
     })
   else:
     return render(request, "stucu_site/search_results.html", {})

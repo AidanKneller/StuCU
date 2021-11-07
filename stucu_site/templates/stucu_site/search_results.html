@@ -10,8 +10,72 @@
 
 {% block content %}
   {% if searched %}
-    <h1>Showing results for: {{ searched }}</h1>  
-    <p>Nice !</p>
+    <h1>Showing results for: {{ searched }}</h1>
+    {% if academic_name_matches %}
+      <h2>Academics...</h2>
+      <ul>
+      {% for resource in academic_name_matches %}
+        <p><a href="{% url 'academics-detail-page' resource.academics_id %}" style="text-decoration: none">{{resource.website_name|title}}</a></p>
+      {% endfor %}
+      </ul>
+    {% else %}
+      <h2>Academics - No matches</h2>
+    {% endif %}
+    <br>
+    {% if off_campus_matches %}
+      <h2>Off Campus Housing...</h2>
+      <ul>
+        {% comment %} {% for resource in off_campus_matches %}
+          <p><a href="{% url 'off-campus-housing-detail-page' resource.off_campus_housing_id %}" style="text-decoration: none">{{resource.company_name|title}}</a></p>
+        {% endfor %} {% endcomment %}
+      </ul>
+    {% else %}
+      <h2>Off Campus Housing - No matches</h2>
+    {% endif %}
+    <br>
+    {% if on_campus_matches %}
+      <h2>On Campus Housing...</h2>
+      <ul>
+        {% for resource in on_campus_matches %}
+          <p><a href="{% url 'on-campus-housing-detail-page' resource.on_campus_housing_id %}" style="text-decoration: none">{{resource.dorm_unit_name|title}}</a></p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h2>On Campus Housing - No matches</h2>
+    {% endif %}
+    <br>
+    {% if rso_matches %}
+      <h2>Registered Student Organzations...</h2>
+      <ul>
+        {% comment %} {% for resource in rso_matches %}
+          <p><a href="{% url 'registered-student-organizations-detail-page' resource.rso_id %}" style="text-decoration: none">{{resource.rso_name|title}}</a></p>
+        {% endfor %} {% endcomment %}
+      </ul>
+    {% else %}
+      <h2>Registered Student Organizations - No matches</h2>
+    {% endif %}
+    <br>
+    {% if restaurants_matches %}
+      <h2>Restaurants...</h2>
+      <ul>
+        {% for resource in restaurants_matches %}
+          <p><a href="{% url 'restaurant-detail-page' resource.restaurant_id %}" style="text-decoration: none">{{resource.restaurant_name|title}}</a></p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h2>Restaurants - No matches</h2>
+    {% endif %}
+    <br>
+      {% if ssm_matches %}
+      <h2>School Social Media...</h2>
+      <ul>
+        {% for resource in ssm_matches %}
+          <p><a href="{% url 'school-social-media-detail-page' resource.ssm_id %}" style="text-decoration: none">{{resource.organization_name|title}}</a></p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <h2>School Social Media - No matches</h2>
+    {% endif %}
   {% else %}
     <h1>Search something!</h1>
   {% endif %}
