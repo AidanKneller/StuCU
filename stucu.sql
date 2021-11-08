@@ -252,6 +252,7 @@ CREATE TABLE `Comments` (
 
 LOCK TABLES `Comments` WRITE;
 /*!40000 ALTER TABLE `Comments` DISABLE KEYS */;
+INSERT INTO `Comments` VALUES (1,1,'Wow I love this site',NULL,NULL,NULL,NULL,8,NULL);
 /*!40000 ALTER TABLE `Comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,6 +364,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('t36b0txmugd8qnm3nuhkd4nfugkldrd7','.eJyrVkouLSpKzSuJLy1OLVKyMtJBEYjPTFGyMkQVy0vMTVWyUiouLUgtAmtC05KSWVyQk1gZD1XnW6SnEAxSqxAKUlwLAHZuKc8:1mjpAq:1njni0XyA2wIhtWATwF25TFci2llP0GfAbK7DI9zRlw','2021-11-21 20:53:56.999793');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -577,6 +579,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
+INSERT INTO `Users` VALUES (1,'Mr. Super User','superuser','1234su'),(2,'Sir Normal User','normuser','norm');
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -589,4 +592,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-11-05 23:14:18
+-- Dump completed on 2021-11-07 14:58:40
