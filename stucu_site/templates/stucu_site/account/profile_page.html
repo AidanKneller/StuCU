@@ -11,6 +11,24 @@
 
 {% block content %}
   <h2>Display Name: "{{ display_name }}"</h2>
+  
   <h2>Username: {{ username }}</h2>
+
+</br></br>
+<h3>My Starred Items</h3>
+{% if starred %}
+  <ul>
+    {% for star in starred %}
+      {% if star.Description %}
+        <p><strong>{{ star.Name }}: </strong>{{ star.Description }}</p>
+      {% else %}
+        <p><strong>{{ star.Name }}</strong></p>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>You have not starred any times</p>
+{% endif %}
+
 
 {% endblock %}
