@@ -49,9 +49,6 @@ class OffCampusHousing(models.Model):
         managed = False
         db_table = 'Off_Campus_Housing'
 
-    def get_url_suffix(self):
-        return self.company_name.lower().replace(" ", "-")
-
 
 class OnCampusHousing(models.Model):
     on_campus_housing_id = models.IntegerField(db_column='On_Campus_Housing_ID', primary_key=True)  # Field name made lowercase.
@@ -67,10 +64,7 @@ class OnCampusHousing(models.Model):
         managed = False
         db_table = 'On_Campus_Housing'
 
-    def get_url_suffix(self):
-        return self.dorm_unit_name.lower().replace(" ", "-")
-
-
+   
 class Rso(models.Model):
     rso_id = models.IntegerField(db_column='RSO_ID', primary_key=True)  # Field name made lowercase.
     rso_name = models.CharField(db_column='RSO_name', max_length=255)  # Field name made lowercase.
@@ -83,10 +77,7 @@ class Rso(models.Model):
         managed = False
         db_table = 'RSO'
 
-    def get_url_suffix(self):
-        return self.rso_name.lower().replace(" ", "-")
-
-
+    
 class Restaurants(models.Model):
     restaurant_id = models.IntegerField(db_column='Restaurant_ID', primary_key=True)  # Field name made lowercase.
     restaurant_name = models.CharField(db_column='Restaurant_name', max_length=255)  # Field name made lowercase.
@@ -98,9 +89,6 @@ class Restaurants(models.Model):
     class Meta:
         managed = False
         db_table = 'Restaurants'
-
-    def get_url_suffix(self):
-        return self.restaurant_name.lower().replace(" ", "-")
 
     
 class SchoolSocialMedia(models.Model):
@@ -114,13 +102,11 @@ class SchoolSocialMedia(models.Model):
     youtube_link = models.CharField(db_column='YouTube_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     pinterest_link = models.CharField(db_column='Pinterest_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     weibo_link = models.CharField(db_column='Weibo_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'School_Social_Media'
-
-    def get_url_suffix(self):
-        return self.organization_name.lower().replace(" ", "-")
 
 
 class Stars(models.Model):

@@ -19,5 +19,11 @@ urlpatterns = [
     path("restaurants/<int:id>", views.restaurant_detail, name="restaurant-detail-page"),
     path("school_social_media/", views.school_social_media, name="school-social-media-page"),
     path("school_social_media/<int:id>", views.ssm_detail, name="school-social-media-detail-page"),
-    path("search_results/", views.search_results, name="search-results")
+    path("search_results/", views.search_results, name="search-results"),
+    path("academics/starring/<int:id>", views.star_academic, name="star-academic"),
+    path("on_campus_housing/starring/<int:id>", views.star_on_campus_housing, name="star-on-campus-housing"),
+    #path("off_campus_housing/starring/<int:id>", views.star_off_campus_housing, name="star-off-campus-housing"),
+    #path("registered_student_organizations/starring/<int:id>", views.star_registered_student_organizations, name="star-rso"),
+    path("restaurants/starring/<int:id>", views.star_restaurant, name="star-restaurant"),
+    path("school_social_media/starring/<int:id>", views.star_school_social_media, name="star-ssm"),
 ]

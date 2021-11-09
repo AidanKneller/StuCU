@@ -33,4 +33,13 @@
       This building does not have a website.
     {% endif %}
   </p>
+
+  {% if is_starred %}
+    <button style='pointer-events: none; opacity: 0.5'>Starred</button>
+  {% else %}
+    <form method="POST" action="{% url 'star-on-campus-housing' resource.on_campus_housing_id %}">
+      {% csrf_token %}
+      <button type="submit">Star</button>
+    </form>
+  {% endif %}
 {% endblock %}

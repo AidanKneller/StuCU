@@ -16,4 +16,13 @@
   {% else %}
     <p>{{ error_message }}</p>
   {% endif %}
+
+  {% if is_starred %}
+    <button style='pointer-events: none; opacity: 0.5'>Starred</button>
+  {% else %}
+    <form method="POST" action="{% url 'star-academic' resource.academics_id %}">
+      {% csrf_token %}
+      <button type="submit">Star</button>
+    </form>
+  {% endif %}
 {% endblock %}
