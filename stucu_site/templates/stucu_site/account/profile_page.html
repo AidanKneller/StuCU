@@ -31,6 +31,11 @@
         {% else %}
           <p><strong>{{ star.Name }}</strong></p>
         {% endif %}
+        <form method="POST" action="{% url 'unstar-from-profile' star.Category star.ID %}">
+          {% csrf_token %}
+          <button type="submit">Unstar</button>
+        </form>
+        </br></br>
       {% endfor %}
     </ul>
   {% else %}

@@ -14,6 +14,8 @@ categories = [
   "school-social-media"
 ]
 
+
+# LOGIN HANDLING
 def login(request):
   return render(request, "stucu_site/account/login.html")
 
@@ -33,28 +35,31 @@ def process_login(request):
   else:
     return render(request, "stucu_site/account/login.html")
 
+
+
+# PROFILE PAGE
 def profile_page(request):
   starred = Stars.objects.raw(
-    '''Select 1 as id, Starred_Items.RSO_name as Name, Starred_Items.Description as Description From (
-    Select RSO.RSO_name, RSO.Description From (Select RSO_ID from Stars where User_ID = %s AND RSO_ID is not null) as derivedRSO
+    '''Select 1 as id, Starred_Items.RSO_name as Name, Starred_Items.Description as Description, Starred_Items.RSO_ID as ID, Starred_Items.Category as Category From (
+    Select RSO.RSO_name, RSO.Description, RSO.RSO_ID, "RSO" as Category From (Select RSO_ID from Stars where User_ID = %s AND RSO_ID is not null) as derivedRSO
     JOIN RSO on (RSO.RSO_ID = derivedRSO.RSO_ID) 
     UNION 
-    Select Academics.Website_name, Academics.Description
+    Select Academics.Website_name, Academics.Description, Academics.Academics_ID, "academics" as Category
     From (Select Academics_ID from Stars where User_ID = %s AND Academics_ID is not null) as derivedAcademics JOIN Academics on (Academics.Academics_ID = derivedAcademics.Academics_ID)
     UNION 
-    Select Restaurants.Restaurant_name, Restaurants.Cuisine
+    Select Restaurants.Restaurant_name, Restaurants.Cuisine, Restaurants.Restaurant_ID, "restaurants" as Category
     From (Select Restaurant_ID from Stars where User_ID = %s AND Restaurant_ID is not null) as derivedRestaurants
     JOIN Restaurants on (Restaurants.Restaurant_ID = derivedRestaurants.Restaurant_ID) 
     UNION
-    Select Off_Campus_Housing.Company_name, Off_Campus_Housing.Description From
+    Select Off_Campus_Housing.Company_name, Off_Campus_Housing.Description, Off_Campus_Housing.Off_Campus_Housing_ID, "off campus" as Category From
     (Select Off_Campus_Housing_ID from Stars where User_ID = %s AND Off_Campus_Housing_ID is not null) as derivedOff_Campus_Housing
     JOIN Off_Campus_Housing on (Off_Campus_Housing.Off_Campus_Housing_ID = derivedOff_Campus_Housing.Off_Campus_Housing_ID)
     UNION
-    Select On_Campus_Housing.Dorm_unit_name, On_Campus_Housing.description From
+    Select On_Campus_Housing.Dorm_unit_name, On_Campus_Housing.description, On_Campus_Housing.On_Campus_Housing_ID, "on campus" as Category From
     (Select On_Campus_Housing_ID from Stars where User_ID = %s AND On_Campus_Housing_ID is not null) as derivedOn_Campus_Housing
     JOIN On_Campus_Housing on (On_Campus_Housing.On_Campus_Housing_ID = derivedOn_Campus_Housing.On_Campus_Housing_ID)
     UNION
-    Select School_Social_Media.Organization_name, School_Social_Media.Description From
+    Select School_Social_Media.Organization_name, School_Social_Media.Description, School_Social_Media.SSM_ID, "SSM" as Category From
     (Select SSM_ID from Stars where User_ID = %s AND SSM_ID is not null) as derivedSchool_Social_Media
     JOIN School_Social_Media on (School_Social_Media.SSM_ID = derivedSchool_Social_Media.SSM_ID)) as Starred_Items''',
     [request.session['current_user_id'], request.session['current_user_id'], 
@@ -67,12 +72,36 @@ def profile_page(request):
     "starred": starred
   })
 
+def unstar_from_profile(request, category, id):
+  user_id = request.session['current_user_id']
+  if category == "academics":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Academics_ID = %s', [user_id, id])
+  elif category == "RSO":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND RSO_ID = %s', [user_id, id])
+  elif category == "SSM":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND SSM_ID = %s', [user_id, id])
+  elif category == "on campus":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND On_Campus_Housing_ID = %s', [user_id, id])
+  elif category == "off campus":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Off_Campus_Housing_ID = %s', [user_id, id])
+  elif category == "restaurants":
+    with connection.cursor() as cursor:
+        cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Restaurant_ID = %s', [user_id, id])
+
+  return profile_page(request)
+
 def landing_page(request):
   return render(request, "stucu_site/landing_page.html", {
     "categories": categories,
     "username": request.session['current_username'],
     "display_name": request.session['current_user_display_name']
   })
+
 
 
 
@@ -264,7 +293,7 @@ def star_school_social_media(request, id):
 def unstar_school_social_media(request, id):
   user_id = request.session['current_user_id']
   with connection.cursor() as cursor:
-      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND School_Social_Media_ID = %s', [user_id, id])
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND SSM_ID = %s', [user_id, id])
   return ssm_detail(request, id)
 
 

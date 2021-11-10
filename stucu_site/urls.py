@@ -32,4 +32,5 @@ urlpatterns = [
     path("restaurants/unstarring/<int:id>", views.unstar_restaurant, name="unstar-restaurant"),
     path("school_social_media/starring/<int:id>", views.star_school_social_media, name="star-ssm"),
     path("school_social_media/unstarring/<int:id>", views.unstar_school_social_media, name="unstar-ssm"),
+    path("profile/unstar/<str:category>/<int:id>", views.unstar_from_profile, name="unstar-from-profile"),
 ]
