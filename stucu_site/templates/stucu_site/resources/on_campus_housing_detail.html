@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+  <form method="POST" action="{% url 'on-campus-housing-page' %}">
+    {% csrf_token %}
+    <button type="submit">Back to On Campus Housing</button>
+  </form>
+
   <h1>{{ resource.dorm_unit_name }}</h1>
   <p>{{ resource.description }}</p>
   <p>Address: {{ resource.address }}</p>
@@ -35,7 +40,10 @@
   </p>
 
   {% if is_starred %}
-    <button style='pointer-events: none; opacity: 0.5'>Starred</button>
+    <form method="POST" action="{% url 'unstar-on-campus-housing' resource.on_campus_housing_id %}">
+      {% csrf_token %}
+      <button type="submit">Unstar</button>
+    </form>
   {% else %}
     <form method="POST" action="{% url 'star-on-campus-housing' resource.on_campus_housing_id %}">
       {% csrf_token %}

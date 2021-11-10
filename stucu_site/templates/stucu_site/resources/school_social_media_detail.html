@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+  <form method="POST" action="{% url 'school-social-media-page' %}">
+    {% csrf_token %}
+    <button type="submit">Back to School Social Media</button>
+  </form>
+
   <h1>{{ resource.organization_name }}</h1>
   {% for social in socials %}
     {% if social %}
@@ -19,7 +24,10 @@
   {% endfor %}
 
   {% if is_starred %}
-    <button style='pointer-events: none; opacity: 0.5'>Starred</button>
+    <form method="POST" action="{% url 'unstar-ssm' resource.ssm_id %}">
+      {% csrf_token %}
+      <button type="submit">Unstar</button>
+    </form>
   {% else %}
     <form method="POST" action="{% url 'star-ssm' resource.ssm_id %}">
       {% csrf_token %}

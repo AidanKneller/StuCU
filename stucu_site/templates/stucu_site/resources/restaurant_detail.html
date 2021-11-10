@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+  <form method="POST" action="{% url 'restaurants-page' %}">
+    {% csrf_token %}
+    <button type="submit">Back to Restaurants</button>
+  </form>
+
   <h1>{{ resource.restaurant_name }}</h1>
   <p>Cuisine: {{ resource.cuisine }}</p>
   <p>Address: {{ resource.address }}</p>
@@ -28,7 +33,10 @@
   </p>
 
   {% if is_starred %}
-    <button style='pointer-events: none; opacity: 0.5'>Starred</button>
+    <form method="POST" action="{% url 'unstar-restaurant' resource.restaurant_id %}">
+      {% csrf_token %}
+      <button type="submit">Unstar</button>
+    </form>
   {% else %}
     <form method="POST" action="{% url 'star-restaurant' resource.restaurant_id %}">
       {% csrf_token %}

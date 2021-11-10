@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+  <form method="POST" action="{% url 'landing-page' %}">
+    {% csrf_token %}
+    <button type="submit">Back to Categories</button>
+  </form>
+
   <h1>On Campus Housing</h1>
   <p>Links to on campus housing options</p>
 

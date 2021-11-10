@@ -101,6 +101,12 @@ def star_academic(request, id):
       cursor.execute("INSERT INTO Stars VALUES (%s, NULL, NULL, NULL, NULL, %s, NULL, %s)", [user_id, id, timestamp])
   return academics_detail(request, id)
 
+def unstar_academic(request, id):
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Academics_ID = %s', [user_id, id])
+  return academics_detail(request, id)
+
 def on_campus_housing(request):
   entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
@@ -128,6 +134,12 @@ def star_on_campus_housing(request, id):
       cursor.execute("INSERT INTO Stars VALUES (%s, NULL, %s, NULL, NULL, NULL, NULL, %s)", [user_id, id, timestamp])
   return on_campus_housing_detail(request, id)
 
+def unstar_on_campus_housing(request, id):
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND On_Campus_Housing_ID = %s', [user_id, id])
+  return on_campus_housing_detail(request, id)
+
 def off_campus_housing(request):
   return render(request, "stucu_site/resources/off_campus_housing_page.html", {
     #this is where we will query the data from this table and send it in?
@@ -151,6 +163,12 @@ def off_campus_housing(request):
 #   with connection.cursor() as cursor:
 #       cursor.execute("INSERT INTO Stars VALUES (%s, NULL, NULL, %s, NULL, NULL, NULL, %s)", [user_id, id, timestamp])
 #   return off_campus_housing_detail(request, id)
+
+# def unstar_off_campus_housing(request, id):
+#   user_id = request.session['current_user_id']
+#   with connection.cursor() as cursor:
+#       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Off_Campus_Housing_ID = %s', [user_id, id])
+#   return off_campus_housing(request, id)
 
 def registered_student_organizations(request):
   return render(request, "stucu_site/resources/registered_student_organizations_page.html", {
@@ -182,6 +200,12 @@ def star_restaurant(request, id):
   user_id = request.session['current_user_id']
   with connection.cursor() as cursor:
       cursor.execute("INSERT INTO Stars VALUES (%s, NULL, NULL, NULL, NULL, NULL, %s, %s)", [user_id, id, timestamp])
+  return restaurant_detail(request, id)
+
+def unstar_restaurant(request, id):
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Restaurant_ID = %s', [user_id, id])
   return restaurant_detail(request, id)
 
 def school_social_media(request):
@@ -217,6 +241,12 @@ def star_school_social_media(request, id):
   user_id = request.session['current_user_id']
   with connection.cursor() as cursor:
       cursor.execute("INSERT INTO Stars VALUES (%s, %s, NULL, NULL, NULL, NULL, NULL, %s)", [user_id, id, timestamp])
+  return ssm_detail(request, id)
+
+def unstar_school_social_media(request, id):
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND School_Social_Media_ID = %s', [user_id, id])
   return ssm_detail(request, id)
 
 # need to add proper search!
