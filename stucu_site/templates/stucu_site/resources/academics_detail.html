@@ -33,4 +33,21 @@
       <button type="submit">Star</button>
     </form>
   {% endif %}
+
+  </br>
+
+  <h3>Comments</h3>
+  <form method="POST" action="{% url 'academics-leave-comment' resource.academics_id %}">
+    {% csrf_token %}
+    <button type="submit">Leave a comment</button>
+  </form>
+    {% if comments %}
+      <ul>
+        {% for comment in comments %}
+          <p>{{ comment.content }}</p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments to show</p>
+    {% endif %}
 {% endblock %}

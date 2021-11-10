@@ -1,0 +1,15 @@
+{% block title %}
+  Update your displayed name
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  <form method="POST" action="{% url 'save-display-name' %}">
+    {% csrf_token %}
+    <input type="text" name="new_name" placeHolder="Type your new name here..." required>
+    <button type="submit">Submit</button>
+  </form>
+
+{% endblock %}

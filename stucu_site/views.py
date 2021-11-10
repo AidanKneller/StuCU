@@ -35,7 +35,16 @@ def process_login(request):
   else:
     return render(request, "stucu_site/account/login.html")
 
+def update_display_name(request):
+  return render(request, "stucu_site/account/update_display_name.html")
 
+def save_display_name(request):
+  new_name = request.POST['new_name']
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+    cursor.execute('UPDATE Users SET Display_name = %s WHERE User_ID = %s', [new_name, user_id])
+  request.session['current_user_display_name'] = new_name
+  return profile_page(request)
 
 # PROFILE PAGE
 def profile_page(request):
@@ -127,11 +136,14 @@ def academics_by_popularity(request):
 def academics_detail(request, id):
   results = Academics.objects.raw('SELECT * FROM Academics WHERE academics_id = %s', [id])
   is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND academics_id = %s', [request.session['current_user_id'], id])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND Academics_ID IS NOT NULL', [request.session['current_user_id']])
+
   # Make sure that the query only returned one item, otherwise something went wrong
   if len(list(results)) == 1: 
     return render(request, "stucu_site/resources/academics_detail.html", {
       "resource": results[0],
-      "is_starred": is_starred
+      "is_starred": is_starred,
+      "comments": comments
     })
   else:
     return render(request, "stucu_site/resources/academics_detail.html", {
@@ -151,6 +163,26 @@ def unstar_academic(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Academics_ID = %s', [user_id, id])
   return academics_detail(request, id)
 
+def academics_leave_comment(request, id):
+  return render(request, "stucu_site/resources/academics_leave_comment.html", {
+    "id": id
+  })
+
+def academics_save_comment(request, id):
+  resource_id = id
+  content = request.POST['content']
+  user_id = request.session['current_user_id']
+  total_comments = Comments.objects.raw('SELECT * FROM Comments')
+  comment_id = len(list(total_comments)) + 1
+  with connection.cursor() as cursor:
+    cursor.execute("INSERT INTO Comments VALUES (%s, %s, %s, NULL, NULL, NULL, NULL, %s, NULL)", 
+    [
+      comment_id, 
+      user_id, 
+      content,
+      resource_id
+    ])
+  return academics_detail(request, id)
 
 
 # INTERACTING WITH ON CAMPUS HOUSING TABLE
@@ -158,6 +190,17 @@ def on_campus_housing(request):
   entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
     "entries": entries
+  })
+
+def on_campus_housing_by_popularity(request):
+  entries = Academics.objects.raw(
+    '''Select r.On_Campus_Housing_ID, COUNT(c.On_Campus_Housing_ID) as NumComments
+      FROM Comments c JOIN On_Campus_Housing r ON(c.On_Campus_Housing_ID = r.On_Campus_Housing_ID)
+      GROUP BY c.On_Campus_Housing_ID
+      ORDER BY NumComments DESC''')
+  return render(request, "stucu_site/resources/academics_page.html", {
+    "entries": entries,
+    "sort_type": "popularity"
   })
 
 def on_campus_housing_detail(request, id):

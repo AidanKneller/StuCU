@@ -18,8 +18,10 @@
   </br></br>
 
   <h2>Display Name: "{{ display_name }}"</h2>
-  
-  <h2>Username: {{ username }}</h2>
+  <form method="POST" action="{% url 'update-display-name' %}">
+    {% csrf_token %}
+    <button type="submit">Update Display Name</button>
+  </form>
 
   </br>
   <h3>My Starred Items</h3>
