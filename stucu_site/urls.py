@@ -9,6 +9,7 @@ urlpatterns = [
     path("categories/", views.landing_page, name="landing-page"),
     path("academics/", views.academics, name="academics-page"),
     path("academics/<int:id>", views.academics_detail, name="academics-detail-page"),
+    path("academics/most-popular/", views.academics_by_popularity, name="academics-by-popularity"),
     path("on_campus_housing/", views.on_campus_housing, name="on-campus-housing-page"),
     path("on_campus_housing/<int:id>", views.on_campus_housing_detail, name="on-campus-housing-detail-page"),
     path("off_campus_housing/", views.off_campus_housing, name="off-campus-housing-page"),

@@ -109,7 +109,19 @@ def landing_page(request):
 def academics(request):
   entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name')
   return render(request, "stucu_site/resources/academics_page.html", {
-    "entries": entries
+    "entries": entries,
+    "sort_type": "alphabetical"
+  })
+
+def academics_by_popularity(request):
+  entries = Academics.objects.raw(
+    '''Select r.Academics_ID, COUNT(c.Academics_ID) as NumComments
+      FROM Comments c JOIN Academics r ON(c.Academics_ID = r.Academics_ID)
+      GROUP BY c.Academics_ID
+      ORDER BY NumComments DESC''')
+  return render(request, "stucu_site/resources/academics_page.html", {
+    "entries": entries,
+    "sort_type": "popularity"
   })
 
 def academics_detail(request, id):

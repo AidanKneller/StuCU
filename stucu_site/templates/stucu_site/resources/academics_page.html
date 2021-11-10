@@ -17,9 +17,26 @@
   <h1>Academics</h1>
   <p>Links to academic resources</p>
 
+  {% if sort_type == "popularity" %}
+    <form method="POST" action="{% url 'academics-page' %}">
+      {% csrf_token %}
+      <button type="submit">Show all</button>
+    </form>
+  {% else %}
+    <form method="POST" action="{% url 'academics-by-popularity' %}">
+      {% csrf_token %}
+      <button type="submit">Show most popular</button>
+    </form>
+  {% endif %}
+
   {% for entry in entries %}
     <div>
-      <h2><a href="{% url 'academics-detail-page' entry.academics_id %}" style="text-decoration: none; color: black">{{entry.website_name|title}}</a></h2>
+      <h2>
+        <a href="{% url 'academics-detail-page' entry.academics_id %}" style="text-decoration: none; color: black">{{entry.website_name|title}}</a>
+        {% if sort_type == "popularity" %}
+          <h4>{{entry.NumComments}} comments</h4>
+        {% endif %}
+      </h2>
     </div> 
   {% endfor%}
 
