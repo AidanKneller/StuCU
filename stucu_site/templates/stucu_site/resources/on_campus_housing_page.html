@@ -17,6 +17,18 @@
   <h1>On Campus Housing</h1>
   <p>Links to on campus housing options</p>
 
+  {% if sort_type == "popularity" %}
+    <form method="POST" action="{% url 'on-campus-housing-page' %}">
+      {% csrf_token %}
+      <button type="submit">Show all</button>
+    </form>
+  {% else %}
+    <form method="POST" action="{% url 'on-campus-housing-by-popularity' %}">
+      {% csrf_token %}
+      <button type="submit">Show most popular</button>
+    </form>
+  {% endif %}
+
   {% for entry in entries %}
     <div>
       <h2><a href="{% url 'on-campus-housing-detail-page' entry.on_campus_housing_id %}" style="text-decoration: none; color: black">{{entry.dorm_unit_name|title}}</a></h2>

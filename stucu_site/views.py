@@ -114,12 +114,17 @@ def landing_page(request):
 
 
 
+
+
+
+
+
+
 # INTERACTING WITH ACADEMICS TABLE
 def academics(request):
   entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name')
   return render(request, "stucu_site/resources/academics_page.html", {
-    "entries": entries,
-    "sort_type": "alphabetical"
+    "entries": entries
   })
 
 def academics_by_popularity(request):
@@ -136,7 +141,7 @@ def academics_by_popularity(request):
 def academics_detail(request, id):
   results = Academics.objects.raw('SELECT * FROM Academics WHERE academics_id = %s', [id])
   is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND academics_id = %s', [request.session['current_user_id'], id])
-  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND Academics_ID IS NOT NULL', [request.session['current_user_id']])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND Academics_ID = %s', [request.session['current_user_id'], id])
 
   # Make sure that the query only returned one item, otherwise something went wrong
   if len(list(results)) == 1: 
@@ -185,6 +190,14 @@ def academics_save_comment(request, id):
   return academics_detail(request, id)
 
 
+
+
+
+
+
+
+
+
 # INTERACTING WITH ON CAMPUS HOUSING TABLE
 def on_campus_housing(request):
   entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name')
@@ -193,12 +206,12 @@ def on_campus_housing(request):
   })
 
 def on_campus_housing_by_popularity(request):
-  entries = Academics.objects.raw(
+  entries = OnCampusHousing.objects.raw(
     '''Select r.On_Campus_Housing_ID, COUNT(c.On_Campus_Housing_ID) as NumComments
       FROM Comments c JOIN On_Campus_Housing r ON(c.On_Campus_Housing_ID = r.On_Campus_Housing_ID)
       GROUP BY c.On_Campus_Housing_ID
       ORDER BY NumComments DESC''')
-  return render(request, "stucu_site/resources/academics_page.html", {
+  return render(request, "stucu_site/resources/on_campus_housing_page.html", {
     "entries": entries,
     "sort_type": "popularity"
   })
@@ -229,6 +242,13 @@ def unstar_on_campus_housing(request, id):
   with connection.cursor() as cursor:
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND On_Campus_Housing_ID = %s', [user_id, id])
   return on_campus_housing_detail(request, id)
+
+
+
+
+
+
+
 
 
 
@@ -265,11 +285,25 @@ def off_campus_housing(request):
 
 
 
+
+
+
+
+
+
+
 # INTERACTING WITH RSO TABLE
 def registered_student_organizations(request):
   return render(request, "stucu_site/resources/registered_student_organizations_page.html", {
     #this is where we will query the data from this table and send it in?
   })
+
+
+
+
+
+
+
 
 
 
@@ -306,6 +340,13 @@ def unstar_restaurant(request, id):
   with connection.cursor() as cursor:
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Restaurant_ID = %s', [user_id, id])
   return restaurant_detail(request, id)
+
+
+
+
+
+
+
 
 
 
@@ -350,6 +391,12 @@ def unstar_school_social_media(request, id):
   with connection.cursor() as cursor:
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND SSM_ID = %s', [user_id, id])
   return ssm_detail(request, id)
+
+
+
+
+
+
 
 
 
