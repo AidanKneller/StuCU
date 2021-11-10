@@ -219,11 +219,14 @@ def on_campus_housing_by_popularity(request):
 def on_campus_housing_detail(request, id):
   results = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE on_campus_housing_id = %s', [id])
   is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND on_campus_housing_id = %s', [request.session['current_user_id'], id])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND on_campus_housing_id = %s', [request.session['current_user_id'], id])
+
   # Make sure that the query only returned one item, otherwise something went wrong
   if len(list(results)) == 1: 
     return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
       "resource": results[0],
-      "is_starred": is_starred
+      "is_starred": is_starred,
+      "comments": comments
     })
   else:
     return render(request, "stucu_site/resources/on_campus_housing_detail.html", {
@@ -243,7 +246,26 @@ def unstar_on_campus_housing(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND On_Campus_Housing_ID = %s', [user_id, id])
   return on_campus_housing_detail(request, id)
 
+def on_campus_housing_leave_comment(request, id):
+  return render(request, "stucu_site/resources/on_campus_housing_leave_comment.html", {
+    "id": id
+  })
 
+def on_campus_housing_save_comment(request, id):
+  resource_id = id
+  content = request.POST['content']
+  user_id = request.session['current_user_id']
+  total_comments = Comments.objects.raw('SELECT * FROM Comments')
+  comment_id = len(list(total_comments)) + 1
+  with connection.cursor() as cursor:
+    cursor.execute("INSERT INTO Comments VALUES (%s, %s, %s, NULL, %s, NULL, NULL, NULL, NULL)", 
+    [
+      comment_id, 
+      user_id, 
+      content,
+      resource_id
+    ])
+  return on_campus_housing_detail(request, id)
 
 
 
@@ -314,14 +336,27 @@ def restaurants(request):
     "entries": entries
   })
 
+def restaurants_by_popularity(request):
+  entries = Restaurants.objects.raw(
+    '''Select r.Restaurant_ID, COUNT(c.Restaurant_ID) as NumComments
+      FROM Comments c JOIN Restaurants r ON(c.Restaurant_ID = r.Restaurant_ID)
+      GROUP BY c.Restaurant_ID
+      ORDER BY NumComments DESC''')
+  return render(request, "stucu_site/resources/restaurants_page.html", {
+    "entries": entries,
+    "sort_type": "popularity"
+  })
+
 def restaurant_detail(request, id):
   results = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_id = %s', [id])
   is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND restaurant_id = %s', [request.session['current_user_id'], id])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND restaurant_id = %s', [request.session['current_user_id'], id])
   # Make sure that the query only returned one item, otherwise something went wrong
   if len(list(results)) == 1: 
     return render(request, "stucu_site/resources/restaurant_detail.html", {
       "resource": results[0],
-      "is_starred": is_starred
+      "is_starred": is_starred,
+      "comments": comments
     })
   else:
     return render(request, "stucu_site/resources/restaurant_detail.html", {
@@ -341,7 +376,26 @@ def unstar_restaurant(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Restaurant_ID = %s', [user_id, id])
   return restaurant_detail(request, id)
 
+def restaurant_leave_comment(request, id):
+  return render(request, "stucu_site/resources/restaurant_leave_comment.html", {
+    "id": id
+  })
 
+def restaurant_save_comment(request, id):
+  resource_id = id
+  content = request.POST['content']
+  user_id = request.session['current_user_id']
+  total_comments = Comments.objects.raw('SELECT * FROM Comments')
+  comment_id = len(list(total_comments)) + 1
+  with connection.cursor() as cursor:
+    cursor.execute("INSERT INTO Comments VALUES (%s, %s, %s, NULL, NULL, NULL, NULL, NULL, %s)", 
+    [
+      comment_id, 
+      user_id, 
+      content,
+      resource_id
+    ])
+  return restaurant_detail(request, id)
 
 
 
@@ -357,9 +411,21 @@ def school_social_media(request):
     "entries": entries
   })
 
+def ssm_by_popularity(request):
+  entries = SchoolSocialMedia.objects.raw(
+    '''Select r.SSM_ID, COUNT(c.SSM_ID) as NumComments
+      FROM Comments c JOIN School_Social_Media r ON(c.SSM_ID = r.SSM_ID)
+      GROUP BY c.SSM_ID
+      ORDER BY NumComments DESC''')
+  return render(request, "stucu_site/resources/school_social_media_page.html", {
+    "entries": entries,
+    "sort_type": "popularity"
+  })
+
 def ssm_detail(request, id):
   results = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE ssm_id = %s', [id])
   is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND ssm_id = %s', [request.session['current_user_id'], id])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND ssm_id = %s', [request.session['current_user_id'], id])
   # Make sure that the query only returned one item, otherwise something went wrong
   if len(list(results)) == 1: 
       resource = results[0]
@@ -372,7 +438,8 @@ def ssm_detail(request, id):
       return render(request, "stucu_site/resources/school_social_media_detail.html", {
         "resource": resource,
         "socials": socials,
-        "is_starred": is_starred
+        "is_starred": is_starred,
+        "comments": comments
       })
   else:
     return render(request, "stucu_site/resources/school_social_media_detail.html", {
@@ -392,7 +459,26 @@ def unstar_school_social_media(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND SSM_ID = %s', [user_id, id])
   return ssm_detail(request, id)
 
+def ssm_leave_comment(request, id):
+  return render(request, "stucu_site/resources/school_social_media_leave_comment.html", {
+    "id": id
+  })
 
+def ssm_save_comment(request, id):
+  resource_id = id
+  content = request.POST['content']
+  user_id = request.session['current_user_id']
+  total_comments = Comments.objects.raw('SELECT * FROM Comments')
+  comment_id = len(list(total_comments)) + 1
+  with connection.cursor() as cursor:
+    cursor.execute("INSERT INTO Comments VALUES (%s, %s, %s, %s, NULL, NULL, NULL, NULL, NULL)", 
+    [
+      comment_id, 
+      user_id, 
+      content,
+      resource_id
+    ])
+  return ssm_detail(request, id)
 
 
 

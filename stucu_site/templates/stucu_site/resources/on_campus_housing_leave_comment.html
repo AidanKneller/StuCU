@@ -1,0 +1,15 @@
+{% block title %}
+  Leave a Comment
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  <form method="POST" action="{% url 'on-campus-housing-save-comment' id %}">
+    {% csrf_token %}
+    <input type="text" name="content" placeHolder="Leave a comment..." required>
+    <button type="submit">Comment</button>
+  </form>
+
+{% endblock %}

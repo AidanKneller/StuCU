@@ -32,6 +32,9 @@
   {% for entry in entries %}
     <div>
       <h2><a href="{% url 'on-campus-housing-detail-page' entry.on_campus_housing_id %}" style="text-decoration: none; color: black">{{entry.dorm_unit_name|title}}</a></h2>
+      {% if sort_type == "popularity" %}
+          <h4>{{entry.NumComments}} comments</h4>
+        {% endif %}
     </div> 
   {% endfor%}
 

@@ -10,7 +10,6 @@ urlpatterns = [
     path("my_profile/save-display-name/", views.save_display_name, name="save-display-name"),
     path("categories/", views.landing_page, name="landing-page"),
 
-
     path("academics/", views.academics, name="academics-page"),
     path("academics/<int:id>", views.academics_detail, name="academics-detail-page"),
     path("academics/most-popular/", views.academics_by_popularity, name="academics-by-popularity"),
@@ -20,25 +19,32 @@ urlpatterns = [
     path("on_campus_housing/", views.on_campus_housing, name="on-campus-housing-page"),
     path("on_campus_housing/<int:id>", views.on_campus_housing_detail, name="on-campus-housing-detail-page"),
     path("on_campus_housing/most-popular/", views.on_campus_housing_by_popularity, name="on-campus-housing-by-popularity"),
-
+    path("on_campus_housing/leave-comment/<int:id>", views.on_campus_housing_leave_comment, name="on-campus-housing-leave-comment"),
+    path("on_campus_housing/save-comment/<int:id>", views.on_campus_housing_save_comment, name="on-campus-housing-save-comment"),
 
     path("off_campus_housing/", views.off_campus_housing, name="off-campus-housing-page"),
     #path("off_campus_housing/<str:company>", views.off_campus_housing_detail, name="off-campus-housing-detail-page"),
     #path("off_campus_housing/most-popular/", views.off_campus_housing_by_popularity, name="off-campus-housing-by-popularity"),
-
+    #path("off_campus_housing/leave-comment/<int:id>", views.off_campus_housing_leave_comment, name="off-campus-housing-leave-comment"),
+    #path("off_campus_housing/save-comment/<int:id>", views.off_campus_housing_save_comment, name="off-campus-housing-save-comment"),
 
     path("registered_student_organizations/", views.registered_student_organizations, name="registered-student-organizations-page"),
     #path("registered_student_organizations/<str:rso>", views.rso_detail, name="registered-student-organizations-detail-page"),
     #path("registered_student_organizations/most-popular/", views.rso_by_popularity, name="registered-student-organizations-by-popularity"),
-
+    #path("registered_student_organizations/leave-comment/<int:id>", views.rso_leave_comment, name="registered-student-organization-leave-comment"),
+    #path("registered_student_organizations/save-comment/<int:id>", views.rso_save_comment, name="registered-student-organization-save-comment"),
 
     path("restaurants/", views.restaurants, name="restaurants-page"),
     path("restaurants/<int:id>", views.restaurant_detail, name="restaurant-detail-page"),
-    #path("restaurants/most-popular/", views.restaurant_by_popularity, name="restaurants-by-popularity"),
+    path("restaurants/most-popular/", views.restaurants_by_popularity, name="restaurants-by-popularity"),
+    path("restaurants/leave-comment/<int:id>", views.restaurant_leave_comment, name="restaurant-leave-comment"),
+    path("restaurants/save-comment/<int:id>", views.restaurant_save_comment, name="restaurant-save-comment"),
 
     path("school_social_media/", views.school_social_media, name="school-social-media-page"),
     path("school_social_media/<int:id>", views.ssm_detail, name="school-social-media-detail-page"),
-    #path("school_social_media/most-popular/", views.ssm_by_popularity, name="school-social-media-detail-by-popularity"),
+    path("school_social_media/most-popular/", views.ssm_by_popularity, name="school-social-media-by-popularity"),
+    path("school_social_media/leave-comment/<int:id>", views.ssm_leave_comment, name="school-social-media-leave-comment"),
+    path("school_social_media/save-comment/<int:id>", views.ssm_save_comment, name="school-social-media-save-comment"),
 
     path("search_results/", views.search_results, name="search-results"),
 
