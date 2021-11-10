@@ -46,7 +46,7 @@ def profile_page(request):
     From (Select Restaurant_ID from Stars where User_ID = %s AND Restaurant_ID is not null) as derivedRestaurants
     JOIN Restaurants on (Restaurants.Restaurant_ID = derivedRestaurants.Restaurant_ID) 
     UNION
-    Select Off_Campus_Housing.Company_name, Off_Campus_Housing.description From
+    Select Off_Campus_Housing.Company_name, Off_Campus_Housing.Description From
     (Select Off_Campus_Housing_ID from Stars where User_ID = %s AND Off_Campus_Housing_ID is not null) as derivedOff_Campus_Housing
     JOIN Off_Campus_Housing on (Off_Campus_Housing.Off_Campus_Housing_ID = derivedOff_Campus_Housing.Off_Campus_Housing_ID)
     UNION
@@ -74,6 +74,9 @@ def landing_page(request):
     "display_name": request.session['current_user_display_name']
   })
 
+
+
+# INTERACTING WITH ACADEMICS TABLE
 def academics(request):
   entries = Academics.objects.raw('SELECT * FROM Academics ORDER BY website_name')
   return render(request, "stucu_site/resources/academics_page.html", {
@@ -107,6 +110,9 @@ def unstar_academic(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Academics_ID = %s', [user_id, id])
   return academics_detail(request, id)
 
+
+
+# INTERACTING WITH ON CAMPUS HOUSING TABLE
 def on_campus_housing(request):
   entries = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing ORDER BY building_name')
   return render(request, "stucu_site/resources/on_campus_housing_page.html", {
@@ -140,6 +146,9 @@ def unstar_on_campus_housing(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND On_Campus_Housing_ID = %s', [user_id, id])
   return on_campus_housing_detail(request, id)
 
+
+
+# INTERACTING WITH OFF CAMPUS HOUSING TABLE
 def off_campus_housing(request):
   return render(request, "stucu_site/resources/off_campus_housing_page.html", {
     #this is where we will query the data from this table and send it in?
@@ -170,11 +179,17 @@ def off_campus_housing(request):
 #       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Off_Campus_Housing_ID = %s', [user_id, id])
 #   return off_campus_housing(request, id)
 
+
+
+# INTERACTING WITH RSO TABLE
 def registered_student_organizations(request):
   return render(request, "stucu_site/resources/registered_student_organizations_page.html", {
     #this is where we will query the data from this table and send it in?
   })
 
+
+
+# INTERACTING WITH RESTAURANTS TABLE
 def restaurants(request):
   entries = Restaurants.objects.raw('SELECT * FROM Restaurants ORDER BY restaurant_name')
   return render(request, "stucu_site/resources/restaurants_page.html", {
@@ -208,6 +223,9 @@ def unstar_restaurant(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND Restaurant_ID = %s', [user_id, id])
   return restaurant_detail(request, id)
 
+
+
+# INTERACT WITH SSM TABLE
 def school_social_media(request):
   entries = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media ORDER BY organization_name')
   return render(request, "stucu_site/resources/school_social_media_page.html", {
@@ -249,7 +267,10 @@ def unstar_school_social_media(request, id):
       cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND School_Social_Media_ID = %s', [user_id, id])
   return ssm_detail(request, id)
 
-# need to add proper search!
+
+
+
+# SEARCHING RESULTS
 def search_results(request):
   if request.method == "POST":
     searched = request.POST['searched']
