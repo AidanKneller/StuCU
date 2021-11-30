@@ -13,6 +13,7 @@ class Academics(models.Model):
     website_name = models.CharField(db_column='Website_name', max_length=400, blank=True, null=True)  # Field name made lowercase.
     website_link = models.CharField(db_column='Website_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    times_searched = models.IntegerField(db_column='times_searched', default=0)
 
     class Meta:
         managed = False
@@ -44,6 +45,8 @@ class OffCampusHousing(models.Model):
     address = models.CharField(db_column='Address', max_length=255)  # Field name made lowercase.
     building_name = models.CharField(db_column='Building_name', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    #times_searched = models.IntegerField(db_column='times_searched', default=0)
+
 
     class Meta:
         managed = False
@@ -59,6 +62,8 @@ class OnCampusHousing(models.Model):
     address = models.CharField(db_column='Address', max_length=255)  # Field name made lowercase.
     building_name = models.CharField(db_column='Building_name', max_length=255, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    times_searched = models.IntegerField(db_column='times_searched', default=0)
+
 
     class Meta:
         managed = False
@@ -72,6 +77,8 @@ class Rso(models.Model):
     phone = models.CharField(db_column='Phone', max_length=10, blank=True, null=True)  # Field name made lowercase.
     website_link = models.CharField(db_column='Website_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    times_searched = models.IntegerField(db_column='times_searched', default=0)
+
 
     class Meta:
         managed = False
@@ -85,6 +92,8 @@ class Restaurants(models.Model):
     cuisine = models.CharField(db_column='Cuisine', max_length=255, blank=True, null=True)  # Field name made lowercase.
     address = models.CharField(db_column='Address', max_length=255)  # Field name made lowercase.
     website_link = models.CharField(db_column='Website_link', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    times_searched = models.IntegerField(db_column='times_searched', default=0)
+
 
     class Meta:
         managed = False
@@ -103,6 +112,8 @@ class SchoolSocialMedia(models.Model):
     pinterest_link = models.CharField(db_column='Pinterest_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     weibo_link = models.CharField(db_column='Weibo_link', max_length=1000, blank=True, null=True)  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=1000, blank=True, null=True)  # Field name made lowercase.
+    times_searched = models.IntegerField(db_column='times_searched', default=0)
+
 
     class Meta:
         managed = False
@@ -133,3 +144,11 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'Users'
+
+class Searches(models.Model):
+    search_id = models.IntegerField(db_column='search_id', primary_key=True)
+    search_phrase = models.CharField(db_column='search_phrase', max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'searches'

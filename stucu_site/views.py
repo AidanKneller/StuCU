@@ -491,13 +491,20 @@ def ssm_save_comment(request, id):
 def search_results(request):
   if request.method == "POST":
     searched = request.POST['searched']
+    # Insert searched item into searches table, kicking off the trigger
+    searched_items = Searches.objects.raw("SELECT * FROM Searches")
+    new_search_id = len(list(searched_items)) + 1
+    with connection.cursor() as cursor:
+      cursor.execute("INSERT INTO searches VALUES (%s, %s)", [new_search_id, searched])
+
+    # Compute the rest of the search
     searched_name = '%' + searched + '%'
     academics_name_like = Academics.objects.raw('SELECT * FROM Academics WHERE website_name LIKE %s ORDER BY website_name', [searched_name])
     off_campus_name_like = OffCampusHousing.objects.raw('SELECT * FROM Off_Campus_Housing WHERE company_name LIKE %s ORDER BY company_name', [searched_name])
     on_campus_name_like = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE dorm_unit_name LIKE %s ORDER BY dorm_unit_name', [searched_name])
     print(on_campus_name_like)
     rso_name_like = Rso.objects.raw('SELECT * FROM RSO WHERE rso_name LIKE %s ORDER BY rso_name', [searched_name])
-    restaurants_name_like = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_name LIKE %s ORDER BY restaurant_name', [searched_name])
+    restaurants_name_like = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_name LIKE %s ORDER BY times_searched DESC', [searched_name])
     ssm_name_like = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE organization_name LIKE %s ORDER BY organization_name', [searched_name])
     return render(request, "stucu_site/search_results.html", {
       "searched": searched,
