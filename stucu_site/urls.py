@@ -29,10 +29,10 @@ urlpatterns = [
     #path("off_campus_housing/save-comment/<int:id>", views.off_campus_housing_save_comment, name="off-campus-housing-save-comment"),
 
     path("registered_student_organizations/", views.registered_student_organizations, name="registered-student-organizations-page"),
-    #path("registered_student_organizations/<str:rso>", views.rso_detail, name="registered-student-organizations-detail-page"),
-    #path("registered_student_organizations/most-popular/", views.rso_by_popularity, name="registered-student-organizations-by-popularity"),
-    #path("registered_student_organizations/leave-comment/<int:id>", views.rso_leave_comment, name="registered-student-organization-leave-comment"),
-    #path("registered_student_organizations/save-comment/<int:id>", views.rso_save_comment, name="registered-student-organization-save-comment"),
+    path("registered_student_organizations/<int:id>", views.registered_student_organizations_detail, name="registered-student-organizations-detail-page"),
+    path("registered_student_organizations/most-popular/", views.registered_student_organizations_by_popularity, name="registered-student-organizations-by-popularity"),
+    path("registered_student_organizations/leave-comment/<int:id>", views.registered_student_organizations_leave_comment, name="registered-student-organizations-leave-comment"),
+    path("registered_student_organizations/save-comment/<int:id>", views.registered_student_organizations_save_comment, name="registered-student-organizations-save-comment"),
 
     path("restaurants/", views.restaurants, name="restaurants-page"),
     path("restaurants/<int:id>", views.restaurant_detail, name="restaurant-detail-page"),
@@ -57,8 +57,8 @@ urlpatterns = [
     #path("off_campus_housing/starring/<int:id>", views.star_off_campus_housing, name="star-off-campus-housing"),
     #path("off_campus_housing/unstarring/<int:id>", views.unstar_off_campus_housing, name="unstar-off-campus-housing"),
 
-    #path("registered_student_organizations/starring/<int:id>", views.star_registered_student_organizations, name="star-rso"),
-    #path("registered_student_organizations/unstarring/<int:id>", views.unstar_registered_student_organizations, name="unstar-rso"),
+    path("registered_student_organizations/starring/<int:id>", views.star_registered_student_organizations, name="star-registered-student-organizations"),
+    path("registered_student_organizations/unstarring/<int:id>", views.unstar_registered_student_organizations, name="unstar-registered-student-organizations"),
 
     path("restaurants/starring/<int:id>", views.star_restaurant, name="star-restaurant"),
     path("restaurants/unstarring/<int:id>", views.unstar_restaurant, name="unstar-restaurant"),

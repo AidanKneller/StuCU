@@ -47,9 +47,9 @@
     {% if rso_matches %}
       <h2>Registered Student Organzations...</h2>
       <ul>
-        {% comment %} {% for resource in rso_matches %}
+        {% for resource in rso_matches %}
           <p><a href="{% url 'registered-student-organizations-detail-page' resource.rso_id %}" style="text-decoration: none; color: black">{{resource.rso_name|title}}</a></p>
-        {% endfor %} {% endcomment %}
+        {% endfor %}
       </ul>
     {% else %}
       <h2>Registered Student Organizations - No matches</h2>

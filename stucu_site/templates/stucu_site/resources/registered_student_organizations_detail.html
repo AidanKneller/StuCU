@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ resource.rso_name }}
+{% endblock %}
+
+{% block css_files %}
+{% endblock %}
+
+{% block content %}
+  <form method="POST" action="{% url 'registered-student-organizations-page' %}">
+    {% csrf_token %}
+    <button type="submit">Back to RSOs</button>
+  </form>
+
+  <h1>{{ resource.rso_name }}</h1>
+  <p>
+    {% if resource.email %}
+      Email them at {{ resource.email }}
+    {% else %}
+      There is no available email address for this RSO.
+    {% endif %}
+  </p>
+  <p>
+    {% if resource.phone %}
+      Call them at {{ resource.phone }}
+    {% else %}
+      There is no available phone number for this RSO.
+    {% endif %}
+  </p>
+  <p>
+    {% if resource.website_link %}
+      Visit them at <a href="{{resource.website_link}}" style="color: blue">{{ resource.website_link }}</a>
+    {% else %}
+      This RSO does not have a website.
+    {% endif %}
+  </p>
+
+  {% if is_starred %}
+    <form method="POST" action="{% url 'unstar-registered-student-organizations' resource.rso_id %}">
+      {% csrf_token %}
+      <button type="submit">Unstar</button>
+    </form>
+  {% else %}
+    <form method="POST" action="{% url 'star-registered-student-organizations' resource.rso_id %}">
+      {% csrf_token %}
+      <button type="submit">Star</button>
+    </form>
+  {% endif %}
+
+  </br>
+
+  <h3>Comments</h3>
+  <form method="POST" action="{% url 'registered-student-organizations-leave-comment' resource.rso_id %}">
+    {% csrf_token %}
+    <button type="submit">Leave a comment</button>
+  </form>
+    {% if comments %}
+      <ul>
+        {% for comment in comments %}
+          <p>{{ comment.content }}</p>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments to show</p>
+    {% endif %}
+
+{% endblock %}

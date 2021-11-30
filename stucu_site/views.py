@@ -316,10 +316,71 @@ def off_campus_housing(request):
 
 # INTERACTING WITH RSO TABLE
 def registered_student_organizations(request):
+  entries = Rso.objects.raw('SELECT * FROM RSO ORDER BY RSO_name')
   return render(request, "stucu_site/resources/registered_student_organizations_page.html", {
-    #this is where we will query the data from this table and send it in?
+    "entries": entries
   })
 
+def registered_student_organizations_by_popularity(request):
+  entries = Rso.objects.raw(
+    '''Select r.RSO_ID, COUNT(c.RSO_ID) as NumComments
+      FROM Comments c JOIN RSO r ON(c.RSO_ID = r.RSO_ID)
+      GROUP BY c.RSO_ID
+      ORDER BY NumComments DESC''')
+  return render(request, "stucu_site/resources/registered_student_organizations_page.html", {
+    "entries": entries,
+    "sort_type": "popularity"
+  })
+
+def registered_student_organizations_detail(request, id):
+  results = Rso.objects.raw('SELECT * FROM RSO WHERE RSO_ID = %s', [id])
+  is_starred = Stars.objects.raw('SELECT *, 1 as id FROM Stars WHERE user_id = %s AND RSO_ID = %s', [request.session['current_user_id'], id])
+  comments = Comments.objects.raw('SELECT * FROM Comments WHERE User_ID = %s AND RSO_ID = %s', [request.session['current_user_id'], id])
+  # Make sure that the query only returned one item, otherwise something went wrong
+  if len(list(results)) == 1: 
+    return render(request, "stucu_site/resources/registered_student_organizations_detail.html", {
+      "resource": results[0],
+      "is_starred": is_starred,
+      "comments": comments
+    })
+  else:
+    return render(request, "stucu_site/resources/registered_student_organizations_detail.html", {
+      "error_message": "Oh no! Something went wrong with accessing this resource."
+    })
+
+def star_registered_student_organizations(request, id):
+  timestamp = datetime.now()
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute("INSERT INTO Stars VALUES (%s, NULL, NULL, NULL, %s, NULL, NULL, %s)", [user_id, id, timestamp])
+  return registered_student_organizations_detail(request, id)
+
+def unstar_registered_student_organizations(request, id):
+  user_id = request.session['current_user_id']
+  with connection.cursor() as cursor:
+      cursor.execute('DELETE FROM Stars WHERE User_ID = %s AND RSO_ID = %s', [user_id, id])
+  return registered_student_organizations_detail(request, id)
+
+def registered_student_organizations_leave_comment(request, id):
+  return render(request, "stucu_site/resources/registered_student_organizations_leave_comment.html", {
+    "id": id
+  })
+
+def registered_student_organizations_save_comment(request, id):
+  resource_id = id
+  content = request.POST['content']
+  user_id = request.session['current_user_id']
+  total_comments = Comments.objects.raw('SELECT * FROM Comments')
+  comment_id = len(list(total_comments)) + 1
+  with connection.cursor() as cursor:
+    cursor.execute("INSERT INTO Comments VALUES (%s, %s, %s, NULL, NULL, NULL, %s, NULL, NULL)", 
+    [
+      comment_id, 
+      user_id, 
+      content,
+      resource_id
+    ])
+  return registered_student_organizations_detail(request, id)
 
 
 
@@ -499,13 +560,12 @@ def search_results(request):
 
     # Compute the rest of the search
     searched_name = '%' + searched + '%'
-    academics_name_like = Academics.objects.raw('SELECT * FROM Academics WHERE website_name LIKE %s ORDER BY website_name', [searched_name])
-    off_campus_name_like = OffCampusHousing.objects.raw('SELECT * FROM Off_Campus_Housing WHERE company_name LIKE %s ORDER BY company_name', [searched_name])
-    on_campus_name_like = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE dorm_unit_name LIKE %s ORDER BY dorm_unit_name', [searched_name])
-    print(on_campus_name_like)
-    rso_name_like = Rso.objects.raw('SELECT * FROM RSO WHERE rso_name LIKE %s ORDER BY rso_name', [searched_name])
+    academics_name_like = Academics.objects.raw('SELECT * FROM Academics WHERE website_name LIKE %s ORDER BY times_searched DESC', [searched_name])
+    off_campus_name_like = OffCampusHousing.objects.raw('SELECT * FROM Off_Campus_Housing WHERE company_name LIKE %s', [searched_name])
+    on_campus_name_like = OnCampusHousing.objects.raw('SELECT * FROM On_Campus_Housing WHERE dorm_unit_name LIKE %s ORDER BY times_searched DESC', [searched_name])
+    rso_name_like = Rso.objects.raw('SELECT * FROM RSO WHERE RSO_name LIKE %s ORDER BY times_searched DESC', [searched_name])
     restaurants_name_like = Restaurants.objects.raw('SELECT * FROM Restaurants WHERE restaurant_name LIKE %s ORDER BY times_searched DESC', [searched_name])
-    ssm_name_like = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE organization_name LIKE %s ORDER BY organization_name', [searched_name])
+    ssm_name_like = SchoolSocialMedia.objects.raw('SELECT * FROM School_Social_Media WHERE organization_name LIKE %s ORDER BY times_searched DESC', [searched_name])
     return render(request, "stucu_site/search_results.html", {
       "searched": searched,
       "academic_name_matches": academics_name_like,
